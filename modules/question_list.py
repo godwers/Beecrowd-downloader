@@ -4,7 +4,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import (
     ElementNotInteractableException,
-    TimeoutException,
+    NoSuchElementException,
     ElementClickInterceptedException,
 )
 from .constants import ACCEPTED_LIST_URL
@@ -60,30 +60,15 @@ def list_loop(driver) -> dict:
         try:
             for i in range(1, 29):
                 numeros = int(
-                    WebDriverWait(driver, 15)
-                    .until(
-                        EC.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                f"/html/body/div/div/div[2]/div[4]/div/div[2]/table/tbody/tr[{i}]/td[3]/a",
-                            )
-                        )
-                    )
-                    .text
+                    driver.find_element(
+                        By.XPATH,
+                        f"/html/body/div/div/div[2]/div[4]/div/div[2]/table/tbody/tr[{i}]/td[3]/a",
+                    ).text
                 )
-
-                linguagem = (
-                    WebDriverWait(driver, 15)
-                    .until(
-                        EC.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                f"/html/body/div[7]/div/div[2]/div[4]/div/div[2]/table/tbody/tr[{i}]/td[6]",
-                            )
-                        )
-                    )
-                    .text
-                )
+                linguagem = driver.find_element(
+                    By.XPATH,
+                    f"/html/body/div[7]/div/div[2]/div[4]/div/div[2]/table/tbody/tr[{i}]/td[6]",
+                ).text
 
                 if linguagem not in questions_list:
                     questions_list[linguagem] = set()
@@ -92,20 +77,20 @@ def list_loop(driver) -> dict:
             pagina += 1
             sleep(1)
 
-        except TimeoutException:
+        except NoSuchElementException:
             if pagina + 1 > pagina_final:
                 break
             continue
-
-    for i in questions_list:
-        lista_questoes = list(questions_list[i])
-        lista_questoes.sort()
-        questions_list[i] = lista_questoes
-
     return questions_list
 
 
 def get_solved_list(driver):
     driver.get(ACCEPTED_LIST_URL)
     question_list = list_loop(driver)
+
+    for i in question_list:
+        lista_questoes = list(question_list[i])
+        lista_questoes.sort()
+        question_list[i] = lista_questoes
+
     return question_list
