@@ -11,7 +11,7 @@ def check_login(driver, url) -> bool:
     return False
 
 
-def login(driver):
+def login(driver) -> None:
     driver.get(LOGIN_URL)
 
     username = input("Digite seu email: ")
