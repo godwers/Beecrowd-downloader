@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from time import sleep
 from modules.login import login
 from modules.question_list import get_solved_list
@@ -26,9 +27,9 @@ def main() -> None:
         questions_list = solved_list[language]
         while pointer < len(questions_list):
             answer_url = f"https://judge.beecrowd.com/pt/runs?problem_id={questions_list[pointer]}&answer_id=1&language_id={LANGUAGE_ID[language]}"
-            print(answer_url)
             driver.get(answer_url)
-            break
+            resolucao_id = driver.find_element(By.CLASS_NAME, "id").text
+            pointer += 1
 
     driver.close()
 
