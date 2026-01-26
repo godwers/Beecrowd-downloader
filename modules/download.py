@@ -1,12 +1,21 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
+
+from time import sleep
+
+from .constants import LANGUAGE_ID
 
 
 def get_question_name(driver):
-    question_name = driver.title
-    return question_name.split("-")[1]
+    return driver.title.split("-")[1]
+
+
+def click_edit_button(driver) -> None:
+    sleep(2)
+    driver.find_element(By.XPATH, "/html/body/div[7]/div/div[2]/div[1]/div/a").click()
+    sleep(2)
 
 
 def get_question_diffculty(driver):
@@ -17,6 +26,7 @@ def get_question_diffculty(driver):
 
 def get_category_problem(driver):
     try:
+        click_edit_button(driver)
         return (
             WebDriverWait(driver, 30)
             .until(
@@ -50,8 +60,23 @@ def get_code(driver) -> str:
     return code
 
 
-def get_question_information(driver, question_id=-1):
+def get_question_information(driver, question_id: int = -1):
     code = get_code(driver)
     category_type = get_category_problem(driver)
     code_title = f"Questão {question_id} - {get_question_name(driver)} - {get_question_diffculty(driver)}"
     return code, category_type, code_title
+
+
+def go_to_page_with_code(
+    driver, question_id: int = -1, language: str = "x86_64"
+) -> None:
+    while True:
+        try:
+            answer_url = f"https://judge.beecrowd.com/pt/runs?problem_id={question_id}&answer_id=1&language_id={LANGUAGE_ID[language]}"
+            driver.get(answer_url)
+            sleep(2)
+            code_id = driver.find_element(By.CLASS_NAME, "id").text
+            driver.get(f"https://judge.beecrowd.com/pt/runs/code/{code_id}")
+            break
+        except NoSuchElementException:
+            continue
