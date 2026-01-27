@@ -11,7 +11,7 @@ from modules.download import get_question_information, go_to_page_with_code
 
 def main() -> None:
     options = webdriver.FirefoxOptions()
-    # options.add_argument("--headless=new")  # Comment this line to debug
+    options.add_argument("--headless=new")  # Comment this line to debug
     driver = webdriver.Firefox(options=options)
 
     login(driver)
