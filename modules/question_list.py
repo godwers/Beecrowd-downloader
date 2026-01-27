@@ -55,7 +55,7 @@ def list_loop(driver) -> dict:
     pagina = 1
     while pagina <= pagina_final:
         driver.get(f"{ACCEPTED_LIST_URL}&page={pagina}&sort=problem_id&direction=asc")
-        driver.execute_script("document.body.style.zoom = '0.5'")
+        # driver.execute_script("document.body.style.zoom = '0.5'")
         sleep(5)
         try:
             for i in range(1, 29):

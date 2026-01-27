@@ -11,7 +11,7 @@ from modules.download import get_question_information, go_to_page_with_code
 
 def main() -> None:
     options = webdriver.FirefoxOptions()
-    options.add_argument("--headless=new")  # Comment this line to debug
+    # options.add_argument("--headless=new")  # Comment this line to debug
     driver = webdriver.Firefox(options=options)
 
     login(driver)
@@ -36,7 +36,7 @@ def main() -> None:
                 )
                 question_number = code_title.split()[1]
 
-                add_question(category_type, question_number, language, code)
+                add_question(category_type, question_number, language, code, code_title)
                 print(code_title)
                 print(category_type)
                 print(code)

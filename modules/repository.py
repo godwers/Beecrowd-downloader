@@ -1,8 +1,14 @@
 import os
-from .constants import LANGUAGE_EXTENSION
+import sys
 
-current_directory = os.getcwd()
-path = os.path.join(current_directory, "beecrowd_repository")
+from .constants import LANGUAGE_EXTENSION, LANGUAGE_COMMENT
+
+if sys.platform == "win32":
+    home_path = os.environ["%USERPROFILE%"]
+else:  # assuming if you use linux/macos because they are based on unix
+    home_path = os.environ["HOME"]
+
+path = os.path.join(home_path, "beecrowd_repository")
 folders = {
     "INICIANTE": "1. Iniciante",
     "AD-HOC": "2. AD-HOC",
@@ -20,12 +26,27 @@ def go_to_parent_path() -> None:
     os.chdir(path)
 
 
+def sanitize_question_title(question_title: str) -> str:
+    novo_texto = ""
+
+    for index, char in enumerate(question_title):
+        if char == " " and question_title[index + 1] == " ":
+            continue
+        elif char == "Í" and question_title[index : index + 4] == "ÍVEL":
+            novo_texto += question_title[index:].lower()
+            break
+        novo_texto += char
+
+    return novo_texto
+
+
 def go_to_category_path(folder: str) -> None:
     os.chdir(os.path.join(path, folders[folder]))
 
 
-def write_file(language: str, code: str) -> None:
+def write_file(language: str, code: str, question_title) -> None:
     with open(f"resolucao{LANGUAGE_EXTENSION[language]}", "w", encoding="utf-8") as f:
+        f.write(f"{LANGUAGE_COMMENT[language]} {question_title}\n")
         f.write(code)
 
 
@@ -42,8 +63,13 @@ def create_repository() -> None:
 
 
 def add_question(
-    question_type: str, question_number: str, language: str, code: str
+    question_type: str,
+    question_number: str,
+    language: str,
+    code: str,
+    question_title: str,
 ) -> None:
+    question_title = sanitize_question_title(question_title)
     go_to_category_path(question_type)
     question_path = f"beecrowd_{question_number}"
     try:
@@ -53,5 +79,6 @@ def add_question(
     finally:
         os.chdir(question_path)
 
-    write_file(language, code)
+    write_file(language, code, question_title)
+    print(os.getcwd())
     go_to_parent_path()
