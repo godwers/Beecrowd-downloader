@@ -10,7 +10,7 @@ from selenium.common.exceptions import (
 from .constants import ACCEPTED_LIST_URL
 
 
-def get_lastpage(driver, xpath: str) -> str | None:
+def _get_lastpage(driver, xpath: str) -> str | None:
     try:
         last_page = (
             WebDriverWait(driver, 15)
@@ -24,14 +24,14 @@ def get_lastpage(driver, xpath: str) -> str | None:
 
         return last_page
     except ElementNotInteractableException:
-        get_lastpage(driver, xpath)
+        _get_lastpage(driver, xpath)
 
 
-def get_page_number(driver) -> int | None:
+def _get_page_number(driver) -> int | None:
     try:
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         sleep(5)
-        link_to_last_page = get_lastpage(
+        link_to_last_page = _get_lastpage(
             driver, "/html/body/div/div/div[2]/div[4]/div/div[2]/div[2]/li[4]/a"
         )
 
@@ -42,12 +42,12 @@ def get_page_number(driver) -> int | None:
 
         return int(last_page)
     except ElementNotInteractableException or ElementClickInterceptedException:
-        get_page_number(driver)
+        _get_page_number(driver)
 
 
-def list_loop(driver) -> dict:
+def _list_loop(driver) -> dict:
     questions_list = dict()
-    pagina_final = get_page_number(driver)
+    pagina_final = _get_page_number(driver)
 
     if not pagina_final:  # fuck pyright
         pagina_final = 1
@@ -86,7 +86,7 @@ def list_loop(driver) -> dict:
 
 def get_solved_list(driver) -> dict:
     driver.get(ACCEPTED_LIST_URL)
-    question_list = list_loop(driver)
+    question_list = _list_loop(driver)
 
     for i in question_list:
         lista_questoes = list(question_list[i])
