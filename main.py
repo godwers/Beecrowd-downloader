@@ -1,7 +1,8 @@
+from time import sleep
+from sys import argv,stdout
+
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
-
-from time import sleep
 
 from modules.login import login
 from modules.question_list import get_solved_list
@@ -9,10 +10,7 @@ from modules.repository import create_repository, add_question
 from modules.download import get_question_information, go_to_page_with_code
 
 
-def main() -> None:
-    options = webdriver.FirefoxOptions()
-    options.add_argument("--headless=new")  # Comment this line to debug
-    driver = webdriver.Firefox(options=options)
+def main(driver) -> None:
 
     login(driver)
 
@@ -45,8 +43,16 @@ def main() -> None:
                 sleep(1)
             except TimeoutException:
                 continue
-    driver.close()
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        options = webdriver.FirefoxOptions()
+        if not "--debug" in argv:
+            options.add_argument("--headless=new")          
+        driver = webdriver.Firefox(options=options)
+        main(driver)
+    except:
+        pass
+    finally:
+        driver.close()

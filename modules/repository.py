@@ -58,7 +58,7 @@ def create_repository() -> None:
         for folder_unique in folders:
             os.mkdir(folders[folder_unique])
     except FileExistsError:
-        print("Folder already exist!")
+        print("Repository already exist!")
         os.chdir(path)
 
 
