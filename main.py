@@ -54,10 +54,13 @@ if __name__ == "__main__":
     options = webdriver.FirefoxOptions()
     options.timeouts = { "implicit" : 5432 } # in miliseconds
     options.rage_load_strategy = 'eager'
+
     if not "--debug" in argv:
         options.add_argument("--headless=new")          
+
     with webdriver.Firefox(options=options) as driver:
         addon_file_path = add_ublock(driver)
         asyncio.run(main(driver))
         remove_ublock(addon_file_path)
+
 
