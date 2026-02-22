@@ -24,7 +24,7 @@ def _click_edit_button(driver) -> None:
 
 def _get_question_diffculty(driver) -> str | None:
     return driver.find_element(
-        By.XPATH, "/html/body/div[8]/div[2]/div[1]/div/ul/li[3]/strong"
+        By.CSS_SELECTOR, "#page-name-c > ul:nth-child(2) > li:nth-child(3) > strong:nth-child(1)"
     ).text
 
 
@@ -51,6 +51,7 @@ def _get_category_problem(driver) -> str | None:
 
 def _get_code(driver) -> str:
     code = ""
+    sleep(2)
     code_range: range = range(
         len(
             driver.execute_script(

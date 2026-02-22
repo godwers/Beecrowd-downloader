@@ -72,3 +72,4 @@ LANGUAGE_COMMENT = {
     "PostgreSQL": "--",
     "Lua": "--",
 }
+UBLOCK_ORIGIN_URL = "https://github.com/gorhill/uBlock/releases/download/1.69.0/uBlock0_1.69.0.firefox.signed.xpi"
