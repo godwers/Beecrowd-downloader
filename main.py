@@ -1,5 +1,6 @@
 from time import sleep
-from sys import argv,stdout
+from sys import argv
+import asyncio
 
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
@@ -10,8 +11,8 @@ from modules.repository import create_repository, add_question
 from modules.download import get_question_information, go_to_page_with_code
 
 
-def main(driver) -> None:
-
+async def main(driver) -> None:
+    task_create_repository = asyncio.create_task(create_repository())
     login(driver)
 
     print("Login Successfully")
@@ -19,7 +20,8 @@ def main(driver) -> None:
     solved_list: dict = get_solved_list(driver)
     print("Accepted answers was retrived")
 
-    create_repository()
+    await task_create_repository
+
 
     for language in solved_list:
         pointer = 0
@@ -48,11 +50,13 @@ def main(driver) -> None:
 if __name__ == "__main__":
     try:
         options = webdriver.FirefoxOptions()
+        options.timeouts = { "implicit" : 5432 } # in miliseconds
+        options.rage_load_strategy = 'eager'
         if not "--debug" in argv:
             options.add_argument("--headless=new")          
         driver = webdriver.Firefox(options=options)
-        main(driver)
-    except:
+        asyncio.run(main(driver))
+    except Exception:
         pass
     finally:
         driver.close()

@@ -17,7 +17,7 @@ def _get_question_name(driver) -> str | None:
 
 
 def _click_edit_button(driver) -> None:
-    sleep(2)
+    sleep(3)
     driver.find_element(By.CLASS_NAME, "profile-buttons").click()
     sleep(2)
 
@@ -76,7 +76,7 @@ def go_to_page_with_code(
         try:
             answer_url = f"https://judge.beecrowd.com/pt/runs?problem_id={question_id}&answer_id=1&language_id={LANGUAGE_ID[language]}"
             driver.get(answer_url)
-            sleep(2)
+            sleep(3)
             code_id = driver.find_element(By.CLASS_NAME, "id").text
             driver.get(f"https://judge.beecrowd.com/pt/runs/code/{code_id}")
             break

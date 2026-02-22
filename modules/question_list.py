@@ -92,5 +92,4 @@ def get_solved_list(driver) -> dict:
         lista_questoes = list(question_list[i])
         lista_questoes.sort()
         question_list[i] = lista_questoes
-
     return question_list

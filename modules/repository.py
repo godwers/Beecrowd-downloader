@@ -1,5 +1,6 @@
 import os
 import sys
+import asyncio
 
 from .constants import LANGUAGE_EXTENSION, LANGUAGE_COMMENT
 
@@ -44,13 +45,13 @@ def _go_to_category_path(folder: str) -> None:
     os.chdir(os.path.join(path, folders[folder]))
 
 
-def _write_file(language: str, code: str, question_title) -> None:
+async def _write_file(language: str, code: str, question_title) -> None:
     with open(f"resolucao{LANGUAGE_EXTENSION[language]}", "w", encoding="utf-8") as f:
         f.write(f"{LANGUAGE_COMMENT[language]} {question_title}\n")
         f.write(code)
 
 
-def create_repository() -> None:
+async def create_repository() -> None:
     try:
         os.mkdir(path)
         os.chdir(path)
@@ -62,7 +63,7 @@ def create_repository() -> None:
         os.chdir(path)
 
 
-def add_question(
+async def add_question(
     question_type: str,
     question_number: str,
     language: str,
@@ -71,6 +72,7 @@ def add_question(
 ) -> None:
     question_title = _sanitize_question_title(question_title)
     _go_to_category_path(question_type)
+    task_write_file = asyncio.create_task(_write_file(language, code, question_title))
     question_path = f"beecrowd_{question_number}"
     try:
         os.mkdir(question_path)
@@ -79,6 +81,6 @@ def add_question(
     finally:
         os.chdir(question_path)
 
-    _write_file(language, code, question_title)
-    print(os.getcwd())
+    await task_write_file
+    #print(os.getcwd())
     _go_to_parent_path()
