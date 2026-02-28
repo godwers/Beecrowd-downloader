@@ -7,7 +7,7 @@ from selenium.common.exceptions import TimeoutException
 
 from modules.login import login
 from modules.answers_list import get_solved_list
-from modules.repository import create_repository, add_question
+from modules.repository import create_repository, add_question, start_git_repository
 from modules.scrape_code import get_question_information, go_to_page_with_code
 from modules.addons import add_ublock,remove_ublock
 
@@ -18,10 +18,11 @@ async def main(driver) -> None:
 
     print("Login Successfully")
 
-    solved_list: dict = get_solved_list(driver)
+    solved_list: dict[str,list[int]] = get_solved_list(driver)
     print("Accepted answers was retrived")
 
     await task_create_repository
+    git_repository = start_git_repository()
 
 
     for language in solved_list:
@@ -37,7 +38,10 @@ async def main(driver) -> None:
                 )
                 question_number = code_title.split()[1]
 
-                await add_question(category_type, question_number, language, code, code_title)
+                await add_question(category_type, question_number,
+                                   language, code, code_title,
+                                   git_repository)
+
                 print(code_title)
                 print(category_type)
                 print(code)
