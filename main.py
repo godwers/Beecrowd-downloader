@@ -1,6 +1,6 @@
 from time import sleep
 from sys import argv
-import asyncio
+from asyncio import create_task,run
 
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
@@ -13,7 +13,7 @@ from modules.addons import add_ublock,remove_ublock
 
 
 async def main(driver) -> None:
-    task_create_repository = asyncio.create_task(create_repository())
+    task_create_repository = create_task(create_repository())
     login(driver)
 
     print("Login Successfully")
@@ -47,20 +47,18 @@ async def main(driver) -> None:
             except TimeoutException:
                 continue
 
-"""
-TODO: Add UBlock Origin bc firefox is using 4gb of ram
-"""
 if __name__ == "__main__":
     options = webdriver.FirefoxOptions()
     options.timeouts = { "implicit" : 5432 } # in miliseconds
-    options.rage_load_strategy = 'eager'
 
     if not "--debug" in argv:
         options.add_argument("--headless=new")          
+        options.rage_load_strategy = 'none'
 
     with webdriver.Firefox(options=options) as driver:
         addon_file_path = add_ublock(driver)
-        asyncio.run(main(driver))
+        run(main(driver))
         remove_ublock(addon_file_path)
+
 
 
