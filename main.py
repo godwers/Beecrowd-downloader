@@ -61,6 +61,7 @@ if __name__ == "__main__":
 
     with webdriver.Firefox(options=options) as driver:
         addon_file_path = add_ublock(driver)
+        driver.implicitly_wait(5)
         run(main(driver))
         remove_ublock(addon_file_path)
 
