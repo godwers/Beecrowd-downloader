@@ -3,7 +3,6 @@ from sys import argv
 from asyncio import create_task,run
 
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
 
 from modules.login import login
 from modules.answers_list import get_solved_list
@@ -29,33 +28,30 @@ async def main(driver) -> None:
         pointer = 0
         questions_list = solved_list[language]
         while pointer < len(questions_list):
-            try:
-                go_to_page_with_code(
-                    driver, question_id=questions_list[pointer], language=language
-                )
-                code, category_type, code_title = get_question_information(
-                    driver, question_id=questions_list[pointer]
-                )
-                question_number = code_title.split()[1]
+            go_to_page_with_code(
+                driver, question_id=questions_list[pointer], language=language
+            )
+            code, category_type, code_title = get_question_information(
+                driver, question_id=questions_list[pointer]
+            )
+            question_number = code_title.split()[1]
 
-                await add_question(category_type, question_number,
-                                   language, code, code_title,
-                                   git_repository)
+            await add_question(category_type, question_number,
+                               language, code, code_title,
+                               git_repository)
 
-                print(code_title)
-                print(category_type)
-                print(code)
+            print(code_title)
+            print(category_type)
+            print(code)
 
-                pointer += 1
-                sleep(1)
-            except TimeoutException:
-                continue
+            pointer += 1
+            sleep(1)
 
 if __name__ == "__main__":
     options = webdriver.FirefoxOptions()
     options.timeouts = { "implicit" : 5432 } # in miliseconds
 
-    if not "--debug" in argv:
+    if "--debug" not in argv:
         options.add_argument("--headless=new")          
         options.rage_load_strategy = 'none'
 

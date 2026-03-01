@@ -1,7 +1,9 @@
 from getpass import getpass
+from time import sleep
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from time import sleep
+
 from .constants import LOGIN_URL, HOME_URL
 
 
@@ -14,7 +16,7 @@ def _check_login(driver, url) -> bool:
 
 def login(driver) -> None:
     driver.get(LOGIN_URL)
-    sleep(1)
+    sleep(2)
     driver.refresh() #thanks ublock
 
     username = input("Digite seu email: ")

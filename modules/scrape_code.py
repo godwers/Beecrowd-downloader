@@ -33,7 +33,7 @@ def _get_category_problem(driver) -> str | None:
 
 def _get_code(driver) -> str:
     code = ""
-    sleep(2)
+    sleep(1)
     code_range: range = range(
         len(
             driver.execute_script(
