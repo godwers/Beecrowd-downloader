@@ -5,7 +5,7 @@ This is a repository inspired by [Luan Simões's repository](https://github.com/
 `pip` for managing requirements<br>
 `>=Python 3.10` for Selenium <br>
 `Firefox` for the webdriver <br>
-`git`
+`>=git 1.7.0` for managing the repository <br>
 
 ## How to use:
 1. Clone the latest release 
