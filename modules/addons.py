@@ -6,8 +6,8 @@ from .constants import UBLOCK_ORIGIN_URL
 
 
 def _get_file_name() -> str:
-    filename = filename_from_url(UBLOCK_ORIGIN_URL)
-    return os.path.join(os.getcwd(),filename)
+    filename = filename_from_url(UBLOCK_ORIGIN_URL) # pyright: ignore[]
+    return os.path.join(os.getcwd(),filename) # # pyright: ignore[]
 
 def _get_ublock_addon() -> None:
     download(UBLOCK_ORIGIN_URL,bar=None,out=os.getcwd())

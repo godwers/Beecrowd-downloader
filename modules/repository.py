@@ -74,7 +74,7 @@ async def _update_git_repository(git_repository : Repo,
 async def create_repository() -> None:
     try:
         os.mkdir(path)
-        Repo.init(path)
+        repo = Repo.init(path)
     except FileExistsError:
         print("Repository already exist!")
         os.chdir(path)
@@ -83,6 +83,11 @@ async def create_repository() -> None:
     os.chdir(path)
     for folder_unique in folders:
         os.mkdir(folders[folder_unique])
+    
+    with open(".gitignore","w+",encoding="utf-8") as f:
+        print("*.json",file=f)
+    repo.git.add(".gitignore")
+    repo.index.commit("First commit B)")
 
 
 def start_git_repository() -> Repo:
