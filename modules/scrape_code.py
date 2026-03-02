@@ -55,7 +55,7 @@ def _get_code(driver) -> str:
 def go_to_page_with_code(driver, unique_identifier : str) -> None:
         driver.get(f"https://judge.beecrowd.com/pt/runs/code/{unique_identifier}")
 
-def get_question_information(driver, question_id: int = -1):
+def get_question_information(driver, question_id: str = ""):
     code = _get_code(driver)
     _click_edit_button(driver)
     category_type = _get_category_problem(driver)
