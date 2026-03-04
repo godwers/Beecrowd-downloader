@@ -70,8 +70,11 @@ async def _update_git_repository(git_repository : Repo,
                                  code_language: str,
                                  file_path: str,
                                  flag : int = 0) -> None:
-    commit_message = f"{question_number} {code_language} version"
-    commit_message = "Added " + commit_message if flag == 1 else "Edited " + commit_message
+    if flag == 1:
+        commit_message = f"Edited {question_number} {code_language} version"
+    else:
+        commit_message = f"Added {question_number} {code_language} version"
+
     git_repository.index.add(file_path)
     git_repository.index.commit(commit_message)
     
