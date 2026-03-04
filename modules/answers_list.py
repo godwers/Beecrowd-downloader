@@ -30,7 +30,7 @@ def _get_page_number(driver) -> int | None:
         return int(last_page)
 
 
-def _list_loop(driver) -> dict[str,list[dict[str,str]]]:
+def _list_loop(driver) -> dict[str,dict[str,str]]:
     questions_list = dict()
     pagina_final = _get_page_number(driver)
 
@@ -59,11 +59,9 @@ def _list_loop(driver) -> dict[str,list[dict[str,str]]]:
                 ).text
 
                 if linguagem not in questions_list:
-                    questions_list[linguagem] = list()
+                    questions_list[linguagem] = dict()
 
-                unique_identifier = {numeros : codigo_unico}
-
-                questions_list[linguagem].append(unique_identifier)
+                questions_list[linguagem][numeros] = codigo_unico
             pagina += 1
             sleep(1)
 
@@ -75,8 +73,10 @@ def _list_loop(driver) -> dict[str,list[dict[str,str]]]:
     return questions_list
 
 
-def get_solved_list(driver) -> dict[str,list[dict[str,str]]]:
+def get_solved_list(driver) -> dict[str,dict[str,str]]:
     driver.get(ACCEPTED_LIST_URL)
     question_list = _list_loop(driver)
 
+    print(question_list)
+    exit(1)
     return question_list
