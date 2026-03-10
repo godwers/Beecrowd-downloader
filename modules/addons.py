@@ -1,16 +1,18 @@
-import os 
+import os
 
-from wget import download,filename_from_url
+from wget import download, filename_from_url
 
 from .constants import UBLOCK_ORIGIN_URL
 
 
 def _get_file_name() -> str:
-    filename = filename_from_url(UBLOCK_ORIGIN_URL) # pyright: ignore[]
-    return os.path.join(os.getcwd(),filename) # # pyright: ignore[]
+    filename = filename_from_url(UBLOCK_ORIGIN_URL)  # pyright: ignore[]
+    return os.path.join(os.getcwd(), filename)  # # pyright: ignore[]
+
 
 def _get_ublock_addon() -> None:
-    download(UBLOCK_ORIGIN_URL,bar=None,out=os.getcwd())
+    download(UBLOCK_ORIGIN_URL, bar=None, out=os.getcwd())
+
 
 def add_ublock(driver):
     path_file = _get_file_name()
@@ -18,6 +20,7 @@ def add_ublock(driver):
         _get_ublock_addon()
     driver.install_addon(path_file)
     return path_file
+
 
 def remove_ublock(path_file):
     os.remove(path_file)

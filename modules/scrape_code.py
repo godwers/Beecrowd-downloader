@@ -22,13 +22,15 @@ def _click_edit_button(driver) -> None:
 
 def _get_question_diffculty(driver) -> str | None:
     return driver.find_element(
-        By.CSS_SELECTOR, "#page-name-c > ul:nth-child(2) > li:nth-child(3) > strong:nth-child(1)"
+        By.CSS_SELECTOR,
+        "#page-name-c > ul:nth-child(2) > li:nth-child(3) > strong:nth-child(1)",
     ).text
 
 
-def _get_category_problem(driver) -> str | None:
-    return driver.find_element(By.CSS_SELECTOR, 
-                               "#page-name-c > ul:nth-child(2) > li:nth-child(1)").text
+def _get_category_problem(driver) -> str:
+    return driver.find_element(
+        By.CSS_SELECTOR, "#page-name-c > ul:nth-child(2) > li:nth-child(1)"
+    ).text
 
 
 def _get_code(driver) -> str:
@@ -52,8 +54,9 @@ def _get_code(driver) -> str:
     return code
 
 
-def go_to_page_with_code(driver, unique_identifier : str) -> None:
-        driver.get(f"https://judge.beecrowd.com/pt/runs/code/{unique_identifier}")
+def go_to_page_with_code(driver, unique_identifier: str) -> None:
+    driver.get(f"https://judge.beecrowd.com/pt/runs/code/{unique_identifier}")
+
 
 def get_question_information(driver, question_id: str = ""):
     code = _get_code(driver)

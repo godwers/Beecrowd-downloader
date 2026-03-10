@@ -17,11 +17,11 @@ def _check_login(driver, url) -> bool:
 def login(driver) -> None:
     driver.get(LOGIN_URL)
     sleep(2)
-    driver.refresh() #thanks ublock
+    driver.refresh()  # thanks ublock
 
     username = input("Digite seu email: ")
     driver.find_element(By.NAME, "email").send_keys(username)
-    password = getpass(prompt="Digite a senha da conta: ",echo_char="*")
+    password = getpass(prompt="Digite a senha da conta: ", echo_char="*")
     driver.find_element(By.NAME, "password").send_keys(password + Keys.ENTER)
 
     if not _check_login(driver, HOME_URL):
