@@ -1,6 +1,6 @@
 [project]
 name = "beecrowd-downloader"
-version = "0.1.0"
+version = "1.0.0"
 description = "Get all the code you answered and make it a repository,share your knowledge!"
 readme = "README.md"
 requires-python = ">=3.14"
