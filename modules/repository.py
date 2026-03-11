@@ -100,10 +100,14 @@ async def create_repository() -> None:
     os.chdir(path)
     for folder_unique in folders:
         os.mkdir(folders[folder_unique])
+        os.chdir(folders[folder_unique])
+        with open("placeholder.txt","w",encoding="utf-8") as f:
+            print("placeholder",file=f)
+        os.chdir(path)
 
     with open(".gitignore", "w+", encoding="utf-8") as f:
         print("*.json", file=f)
-    repo.git.add(".gitignore")
+    repo.git.add(".")
     repo.index.commit("First commit B)")
 
 
