@@ -3,7 +3,7 @@ from time import sleep
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
-from .constants import HOME_URL,LANGUAGE_ID,ACCEPTED_LIST_URL
+from .constants import ACCEPTED_LIST_URL
 
 
 def _get_lastpage(driver, xpath: str) -> str | None:
