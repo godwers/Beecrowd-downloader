@@ -12,7 +12,7 @@ def _get_lastpage(driver, xpath: str) -> str | None:
     last_page = driver.find_element(By.XPATH, xpath).get_attribute("href")
     if not last_page:
         print("Something gone wrong")
-        return ""
+        return 
 
     return last_page
 

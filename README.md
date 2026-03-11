@@ -1,5 +1,6 @@
 # Beecrowd Downloader
-This is a repository inspired by [Luan Simões's repository](https://github.com/Snizi/Beecrowd-Code-Downloader),based on this [repository for IFMG students](https://github.com/gabbymagica/IFNeves-beecrowd).
+This is a repository inspired by [Luan Simões's repository](https://github.com/Snizi/Beecrowd-Code-Downloader),
+based on this [repository for IFMG students](https://github.com/gabbymagica/IFNeves-beecrowd).
 
 ##  Dependencies
 `pip` for managing requirements<br>
@@ -17,12 +18,13 @@ git clone https://github.com/godwers/Beecrowd-downloader.git
 python3 -m venv venv
 ```
 3. Activate the virtual enviroment
-> Now it depends of the OS that you are using to activate it.<br> Please look into the [Python virtual enviroment docs](https://docs.python.org/3/library/venv.html#how-venvs-work)
+> Now it depends of the OS that you are using to activate it.<br> 
+Please look into the [Python virtual enviroment docs](https://docs.python.org/3/library/venv.html#how-venvs-work)
 ```
 Example on Linux:
 $ source venv/bin/activate
 ```
-4. Download python requirements using pip
+4. Download the requirements for the project using `pip`
 ```
 pip install -r requirements.txt
 ```
