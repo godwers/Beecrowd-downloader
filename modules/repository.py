@@ -53,10 +53,18 @@ async def _write_file(language: str,
                       question_title: str,
                       question_number: str,
                       git_repository : Repo) -> None:
-    task_update_git_repository = asyncio.create_task(_update_git_repository(git_repository,
-                                                                            question_number,
-                                                                            language,
-                                                                            os.getcwd().split(repository_name)[1][1:]))
+    if os.path.exists(f"resolucao{LANGUAGE_EXTENSION[language]}"):
+        fleg = 1
+    else:
+        fleg = 0
+    print(os.getcwd())
+
+    task_update_git_repository = asyncio.create_task(_update_git_repository(git_repository, 
+                                                                            question_number, 
+                                                                            language, 
+                                                                            os.getcwd().split(repository_name)[1][1:],
+                                                                            fleg))
+
     with open(f"resolucao{LANGUAGE_EXTENSION[language]}", "w", encoding="utf-8") as f:
         f.write(f"{LANGUAGE_COMMENT[language]} {question_title}\n")
         f.write(code)
@@ -65,7 +73,10 @@ async def _write_file(language: str,
 async def _update_git_repository(git_repository : Repo,
                                  question_number : str,
                                  code_language: str,
-                                 file_path: str) -> None:
+                                 file_path: str,
+                                 flag : int) -> None:
+    commit_message = f"{question_number} {code_language} version"
+    commit_message = "Added " + commit_message if flag == 1 else "Edited " + commit_message
     git_repository.index.add(file_path)
     git_repository.index.commit(f"Added {question_number} {code_language} version")
     
