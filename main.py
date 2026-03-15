@@ -9,6 +9,7 @@ from modules.login import login
 from modules.question_list import get_solved_list
 from modules.repository import create_repository, add_question
 from modules.download import get_question_information, go_to_page_with_code
+from modules.addons import add_ublock,remove_ublock
 
 
 async def main(driver) -> None:
@@ -36,7 +37,7 @@ async def main(driver) -> None:
                 )
                 question_number = code_title.split()[1]
 
-                add_question(category_type, question_number, language, code, code_title)
+                await add_question(category_type, question_number, language, code, code_title)
                 print(code_title)
                 print(category_type)
                 print(code)
@@ -46,17 +47,17 @@ async def main(driver) -> None:
             except TimeoutException:
                 continue
 
-
+"""
+TODO: Add UBlock Origin bc firefox is using 4gb of ram
+"""
 if __name__ == "__main__":
-    try:
-        options = webdriver.FirefoxOptions()
-        options.timeouts = { "implicit" : 5432 } # in miliseconds
-        options.rage_load_strategy = 'eager'
-        if not "--debug" in argv:
-            options.add_argument("--headless=new")          
-        driver = webdriver.Firefox(options=options)
+    options = webdriver.FirefoxOptions()
+    options.timeouts = { "implicit" : 5432 } # in miliseconds
+    options.rage_load_strategy = 'eager'
+    if not "--debug" in argv:
+        options.add_argument("--headless=new")          
+    with webdriver.Firefox(options=options) as driver:
+        addon_file_path = add_ublock(driver)
         asyncio.run(main(driver))
-    except Exception:
-        pass
-    finally:
-        driver.close()
+        remove_ublock(addon_file_path)
+
