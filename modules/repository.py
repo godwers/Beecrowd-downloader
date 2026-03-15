@@ -48,28 +48,37 @@ def _go_to_category_path(folder: str) -> None:
     os.chdir(os.path.join(path, folders[folder]))
 
 
-async def _write_file(language: str, 
-                      code: str, 
-                      question_title: str,
-                      question_number: str,
-                      git_repository : Repo,
-                      flag : int = 0) -> None:
-    task_update_git_repository = asyncio.create_task(_update_git_repository(git_repository, 
-                                                                            question_number, 
-                                                                            language, 
-                                                                            os.getcwd().split(repository_name)[1][1:],
-                                                                            flag=flag))
+async def _write_file(
+    language: str,
+    code: str,
+    question_title: str,
+    question_number: str,
+    git_repository: Repo,
+    flag: int = 0,
+) -> None:
+    task_update_git_repository = asyncio.create_task(
+        _update_git_repository(
+            git_repository,
+            question_number,
+            language,
+            os.getcwd().split(repository_name)[1][1:],
+            flag=flag,
+        )
+    )
 
     with open(f"resolucao{LANGUAGE_EXTENSION[language]}", "w", encoding="utf-8") as f:
         f.write(f"{LANGUAGE_COMMENT[language]} {question_title}\n")
         f.write(code)
     await task_update_git_repository
 
-async def _update_git_repository(git_repository : Repo,
-                                 question_number : str,
-                                 code_language: str,
-                                 file_path: str,
-                                 flag : int = 0) -> None:
+
+async def _update_git_repository(
+    git_repository: Repo,
+    question_number: str,
+    code_language: str,
+    file_path: str,
+    flag: int = 0,
+) -> None:
     if flag == 1:
         commit_message = f"Edited {question_number} {code_language} version"
     else:
@@ -77,7 +86,6 @@ async def _update_git_repository(git_repository : Repo,
 
     git_repository.index.add(file_path)
     git_repository.index.commit(commit_message)
-    
 
 
 async def create_repository() -> None:
@@ -87,20 +95,21 @@ async def create_repository() -> None:
     except FileExistsError:
         print("Repository already exist!")
         os.chdir(path)
-        return 
+        return
 
     os.chdir(path)
     for folder_unique in folders:
         os.mkdir(folders[folder_unique])
-    
-    with open(".gitignore","w+",encoding="utf-8") as f:
-        print("*.json",file=f)
+
+    with open(".gitignore", "w+", encoding="utf-8") as f:
+        print("*.json", file=f)
     repo.git.add(".gitignore")
     repo.index.commit("First commit B)")
 
 
 def start_git_repository() -> Repo:
     return Repo(path)
+
 
 async def add_question(
     question_type: str,
@@ -109,11 +118,15 @@ async def add_question(
     code: str,
     question_title: str,
     git_repository: Repo,
-    flag : int = 0,
+    flag: int = 0,
 ) -> None:
     question_title = _sanitize_question_title(question_title)
     _go_to_category_path(question_type)
-    task_write_file = asyncio.create_task(_write_file(language, code, question_title,question_number,git_repository,flag=flag))
+    task_write_file = asyncio.create_task(
+        _write_file(
+            language, code, question_title, question_number, git_repository, flag=flag
+        )
+    )
     question_path = f"beecrowd_{question_number}"
     try:
         os.mkdir(question_path)
