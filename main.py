@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 
 from modules.login import login
-from modules.question_list import get_solved_list
+from modules.answers_list import get_solved_list
 from modules.repository import create_repository, add_question
 from modules.download import get_question_information, go_to_page_with_code
 from modules.addons import add_ublock,remove_ublock
