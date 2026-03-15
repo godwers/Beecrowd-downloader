@@ -11,26 +11,16 @@ from .constants import ACCEPTED_LIST_URL
 
 
 def _get_lastpage(driver, xpath: str) -> str | None:
-    try:
-        last_page = (
-                WebDriverWait(driver,15)
-                .until(EC.presence_of_element_located((By.XPATH, xpath)))
-                .get_attribute("href")
-        )
-
+        last_page = driver.find_element(By.XPATH,xpath).get_attribute("href")
         if not last_page:
             print("Something gone wrong")
             return ""
 
         return last_page
-    except ElementNotInteractableException:
-        _get_lastpage(driver, xpath)
 
 
 def _get_page_number(driver) -> int | None:
-    try:
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        sleep(5)
+        #driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         link_to_last_page = _get_lastpage(
             driver, "/html/body/div/div/div[2]/div[4]/div/div[2]/div[2]/li[4]/a"
         )
@@ -41,8 +31,6 @@ def _get_page_number(driver) -> int | None:
         last_page = link_to_last_page.split("=")[2]
 
         return int(last_page)
-    except ElementNotInteractableException or ElementClickInterceptedException:
-        _get_page_number(driver)
 
 
 def _list_loop(driver) -> dict:
@@ -55,7 +43,6 @@ def _list_loop(driver) -> dict:
     pagina = 1
     while pagina <= pagina_final:
         driver.get(f"{ACCEPTED_LIST_URL}&page={pagina}&sort=problem_id&direction=asc")
-        # driver.execute_script("document.body.style.zoom = '0.5'")
         sleep(5)
         try:
             for i in range(1, 29):
@@ -92,4 +79,5 @@ def get_solved_list(driver) -> dict:
         lista_questoes = list(question_list[i])
         lista_questoes.sort()
         question_list[i] = lista_questoes
+
     return question_list
