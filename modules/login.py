@@ -13,7 +13,8 @@ def _check_login(driver, url) -> bool:
 
 def login(driver) -> None:
     driver.get(LOGIN_URL)
-
+    sleep(1)
+    driver.refresh() #thanks ublock
     username = input("Digite seu email: ")
     driver.find_element(By.NAME, "email").send_keys(username)
     password = getpass(prompt="Digite a senha da conta: ")

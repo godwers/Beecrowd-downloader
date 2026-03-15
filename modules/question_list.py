@@ -13,9 +13,9 @@ from .constants import ACCEPTED_LIST_URL
 def _get_lastpage(driver, xpath: str) -> str | None:
     try:
         last_page = (
-            WebDriverWait(driver, 15)
-            .until(EC.presence_of_element_located((By.XPATH, xpath)))
-            .get_attribute("href")
+                WebDriverWait(driver,15)
+                .until(EC.presence_of_element_located((By.XPATH, xpath)))
+                .get_attribute("href")
         )
 
         if not last_page:
