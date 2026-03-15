@@ -10,7 +10,7 @@ from selenium.common.exceptions import (
 from .constants import ACCEPTED_LIST_URL
 
 
-def get_lastpage(driver, xpath: str):
+def get_lastpage(driver, xpath: str) -> str | None:
     try:
         last_page = (
             WebDriverWait(driver, 15)
@@ -27,7 +27,7 @@ def get_lastpage(driver, xpath: str):
         get_lastpage(driver, xpath)
 
 
-def get_page_number(driver):
+def get_page_number(driver) -> int | None:
     try:
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         sleep(5)
@@ -84,7 +84,7 @@ def list_loop(driver) -> dict:
     return questions_list
 
 
-def get_solved_list(driver):
+def get_solved_list(driver) -> dict:
     driver.get(ACCEPTED_LIST_URL)
     question_list = list_loop(driver)
 
