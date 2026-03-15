@@ -17,9 +17,7 @@ def _get_question_name(driver) -> str | None:
 
 
 def _click_edit_button(driver) -> None:
-    sleep(3)
     driver.find_element(By.CLASS_NAME, "profile-buttons").click()
-    sleep(2)
 
 
 def _get_question_diffculty(driver) -> str | None:
@@ -29,24 +27,8 @@ def _get_question_diffculty(driver) -> str | None:
 
 
 def _get_category_problem(driver) -> str | None:
-    try:
-        return (
-            WebDriverWait(driver, 30)
-            .until(
-                EC.presence_of_element_located(
-                    (
-                        By.CSS_SELECTOR,
-                        "#page-name-c > ul:nth-child(2) > li:nth-child(1)",
-                    )
-                )
-            )
-            .text
-        )
-    except TimeoutException:
-        _get_category_problem(driver)
-    except UnexpectedAlertPresentException:
-        driver.refresh()
-        _get_category_problem(driver)
+    return driver.find_element(By.CSS_SELECTOR, 
+                               "#page-name-c > ul:nth-child(2) > li:nth-child(1)").text
 
 
 def _get_code(driver) -> str:
@@ -73,17 +55,10 @@ def _get_code(driver) -> str:
 def go_to_page_with_code(
     driver, question_id: int = -1, language: str = "x86_64"
 ) -> None:
-    while True:
-        try:
-            answer_url = f"https://judge.beecrowd.com/pt/runs?problem_id={question_id}&answer_id=1&language_id={LANGUAGE_ID[language]}"
-            driver.get(answer_url)
-            sleep(3)
-            code_id = driver.find_element(By.CLASS_NAME, "id").text
-            driver.get(f"https://judge.beecrowd.com/pt/runs/code/{code_id}")
-            break
-        except NoSuchElementException:
-            continue
-
+        answer_url = f"https://judge.beecrowd.com/pt/runs?problem_id={question_id}&answer_id=1&language_id={LANGUAGE_ID[language]}"
+        driver.get(answer_url)
+        code_id = driver.find_element(By.CLASS_NAME, "id").text
+        driver.get(f"https://judge.beecrowd.com/pt/runs/code/{code_id}")
 
 def get_question_information(driver, question_id: int = -1):
     code = _get_code(driver)
