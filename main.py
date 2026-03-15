@@ -19,7 +19,7 @@ async def main(driver) -> None:
 
     print("Login Successfully")
 
-    solved_list: dict[str,list[dict[str,str]]] = get_solved_list(driver)
+    solved_list: dict[str,dict[str,str]] = get_solved_list(driver)
     print("Accepted answers was retrived")
 
     await task_create_repository
@@ -30,40 +30,42 @@ async def main(driver) -> None:
     else:
         with open("current_answers.json","r",encoding="utf-8") as file:
             old_answers = load(file)
+        
 
-    for language in solved_list:
-        pointer = 0
-        questions_list : list[dict[str,str]] = solved_list[language]
-        while pointer < len(questions_list):
-            _ = questions_list[pointer]
-            question_id = list(_.keys())[0]
-            unique_identifier = _.get(question_id)
+    for language in solved_list.keys():
+        for question_number in solved_list[language].keys():
+            flag = 0
+            unique_identifier = solved_list[language][question_number]
 
-            old_unique_identifier = old_answers[language]
-            old_unique_identifier = old_unique_identifier[pointer]
+            if language in old_answers.keys():
+                if question_number in old_answers[language].keys():
+                    old_unique_identifier = old_answers[language][question_number]
 
-            if old_unique_identifier[question_id] == unique_identifier and (
-                    os.path.exists("current_answers.json")
-            ):
-                pointer += 1
-                continue
+                    if old_unique_identifier == unique_identifier and (
+                            os.path.exists("current_answers.json")
+                    ):
+                        continue
+                    flag = 1
+                    del old_unique_identifier
+
 
             go_to_page_with_code(driver,unique_identifier) # pyright: ignore[]
             code, category_type, code_title = get_question_information(
-                driver, question_id=question_id
+                driver, question_id=question_number
             )
             question_number = code_title.split()[1]
 
             await add_question(category_type, question_number, # pyright: ignore[]
                                language, code, code_title,
-                               git_repository)
+                               git_repository,flag=flag)
+            
+            del flag
 
             print(code_title)
             print(category_type)
             print(code)
 
-            pointer += 1
-            sleep(1)
+
     with open("current_answers.json","w",encoding="utf-8") as f:
         dump(solved_list,f,indent=4)
 

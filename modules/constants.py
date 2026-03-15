@@ -53,7 +53,11 @@ LANGUAGE_ID = {
 LANGUAGE_EXTENSION = {
     "Python 3.11": ".py",
     "Rust": ".rs",
+    "Go": ".go",
+    "Go 1.15": ".go",
+    "Go 1.20": ".go",
     "Lua": ".lua",
+    "Lua 5.4": ".lua",
     "JavaScript": ".js",
     "TypeScript 4.1": ".ts",
     "C99": ".c",
@@ -69,7 +73,11 @@ LANGUAGE_COMMENT = {
     "C99": "//",
     "C++20": "//",
     "C#": "//",
+    "Go": "//",
+    "Go 1.15": "//",
+    "Go 1.20": "//",
     "PostgreSQL": "--",
     "Lua": "--",
+    "Lua 5.4": "--",
 }
 UBLOCK_ORIGIN_URL = "https://github.com/gorhill/uBlock/releases/download/1.69.0/uBlock0_1.69.0.firefox.signed.xpi"

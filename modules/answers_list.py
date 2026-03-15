@@ -77,6 +77,4 @@ def get_solved_list(driver) -> dict[str,dict[str,str]]:
     driver.get(ACCEPTED_LIST_URL)
     question_list = _list_loop(driver)
 
-    print(question_list)
-    exit(1)
     return question_list
