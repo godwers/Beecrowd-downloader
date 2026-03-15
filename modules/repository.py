@@ -55,13 +55,14 @@ async def _write_file(
     question_number: str,
     git_repository: Repo,
 ) -> None:
+    flag = 1 if os.path.exists(f"resolucao{LANGUAGE_EXTENSION[language]}") else 0
     task_update_git_repository = asyncio.create_task(
         _update_git_repository(
             git_repository,
             question_number,
             language,
             os.getcwd().split(repository_name)[1][1:],
-            f"resolucao{LANGUAGE_EXTENSION[language]}"
+            flag
         )
     )
 
@@ -76,9 +77,9 @@ async def _update_git_repository(
     question_number: str,
     code_language: str,
     file_path: str,
-    file_name: str,
+    flag : int,
 ) -> None:
-    if os.path.exists(file_name):
+    if flag == 1:
         commit_message = f"Edited {question_number} {code_language} version"
     else:
         commit_message = f"Added {question_number} {code_language} version"

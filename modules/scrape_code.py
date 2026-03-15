@@ -1,15 +1,6 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.common.exceptions import (
-    NoSuchElementException,
-    TimeoutException,
-    UnexpectedAlertPresentException,
-)
 
 from time import sleep
-
-from .constants import LANGUAGE_ID
 
 
 def _get_question_name(driver) -> str | None:
