@@ -1,12 +1,10 @@
 from time import sleep
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import (
-    ElementNotInteractableException,
-    NoSuchElementException,
-    ElementClickInterceptedException,
-)
+from selenium.common.exceptions import NoSuchElementException
+
 from .constants import ACCEPTED_LIST_URL
 
 
@@ -20,7 +18,6 @@ def _get_lastpage(driver, xpath: str) -> str | None:
 
 
 def _get_page_number(driver) -> int | None:
-        #driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         link_to_last_page = _get_lastpage(
             driver, "/html/body/div/div/div[2]/div[4]/div/div[2]/div[2]/li[4]/a"
         )
@@ -33,7 +30,7 @@ def _get_page_number(driver) -> int | None:
         return int(last_page)
 
 
-def _list_loop(driver) -> dict:
+def _list_loop(driver) -> dict[str,list[dict[int,str]]]:
     questions_list = dict()
     pagina_final = _get_page_number(driver)
 
@@ -46,6 +43,11 @@ def _list_loop(driver) -> dict:
         sleep(5)
         try:
             for i in range(1, 29):
+                codigo_unico = driver.find_element(
+                        By.XPATH, 
+                        f"/html/body/div[7]/div[2]/div[2]/div[4]/div/div[2]/table/tbody/tr[{i}]/td[1]"
+                ).text
+                
                 numeros = int(
                     driver.find_element(
                         By.XPATH,
@@ -58,9 +60,11 @@ def _list_loop(driver) -> dict:
                 ).text
 
                 if linguagem not in questions_list:
-                    questions_list[linguagem] = set()
+                    questions_list[linguagem] = list()
 
-                questions_list[linguagem].add(numeros)
+                unique_identifier = {numeros : codigo_unico}
+
+                questions_list[linguagem].append(unique_identifier)
             pagina += 1
             sleep(1)
 
@@ -68,16 +72,12 @@ def _list_loop(driver) -> dict:
             if pagina + 1 > pagina_final:
                 break
             continue
+
     return questions_list
 
 
-def get_solved_list(driver) -> dict:
+def get_solved_list(driver) -> dict[str,list[dict[int,str]]]:
     driver.get(ACCEPTED_LIST_URL)
     question_list = _list_loop(driver)
-
-    for i in question_list:
-        lista_questoes = list(question_list[i])
-        lista_questoes.sort()
-        question_list[i] = lista_questoes
 
     return question_list

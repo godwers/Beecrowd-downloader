@@ -52,13 +52,8 @@ def _get_code(driver) -> str:
     return code
 
 
-def go_to_page_with_code(
-    driver, question_id: int = -1, language: str = "x86_64"
-) -> None:
-        answer_url = f"https://judge.beecrowd.com/pt/runs?problem_id={question_id}&answer_id=1&language_id={LANGUAGE_ID[language]}"
-        driver.get(answer_url)
-        code_id = driver.find_element(By.CLASS_NAME, "id").text
-        driver.get(f"https://judge.beecrowd.com/pt/runs/code/{code_id}")
+def go_to_page_with_code(driver, unique_identifier : str) -> None:
+        driver.get(f"https://judge.beecrowd.com/pt/runs/code/{unique_identifier}")
 
 def get_question_information(driver, question_id: int = -1):
     code = _get_code(driver)
