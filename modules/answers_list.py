@@ -27,12 +27,6 @@ def _get_page_number(driver) -> int | None:
 
     return int(last_page)
 
-def _get_unique_code(driver,code_number : str,language : str) -> str:
-    driver.get(f"{HOME_URL}/runs?problem_id={code_number}&answer_id=1&language_id={LANGUAGE_ID[language]}")
-    unique_code = driver.find_element(By.XPATH,"/html/body/div[1]/div[2]/div[2]/div[4]/div/div[2]/table/tbody/tr[1]/td[1]/a").text
-    driver.back()
-    return unique_code
-
 def _list_loop(driver) -> dict[str, dict[str, str]]:
     questions_list = dict()
     pagina_final = _get_page_number(driver)
@@ -45,7 +39,7 @@ def _list_loop(driver) -> dict[str, dict[str, str]]:
         driver.get(f"{ACCEPTED_LIST_URL}&page={pagina}&sort=problem_id&direction=asc")
         sleep(1)
         try:
-            for i in range(1, 29):
+            for i in range(1, 30):
                 numeros = driver.find_element(
                     By.XPATH,
                     f"/html/body/div/div/div[2]/div[4]/div/div[2]/table/tbody/tr[{i}]/td[3]/a",
@@ -55,20 +49,26 @@ def _list_loop(driver) -> dict[str, dict[str, str]]:
                     By.XPATH,
                     f"/html/body/div[7]/div/div[2]/div[4]/div/div[2]/table/tbody/tr[{i}]/td[6]",
                 ).text
-
-                codigo_unico = _get_unique_code(driver,numeros,linguagem)
-                print(codigo_unico)
+                
+                codigo_unico = driver.find_element(
+                        By.XPATH,f"/html/body/div[7]/div[2]/div[2]/div[4]/div/div[2]/table/tbody/tr[{i}]/td[1]/a"
+                ).text
 
                 if linguagem not in questions_list:
                     questions_list[linguagem] = dict()
+                if numeros not in questions_list[linguagem]:
+                    questions_list[linguagem][numeros] = codigo_unico
 
-                questions_list[linguagem][numeros] = codigo_unico
+                if codigo_unico > questions_list[linguagem][numeros]:
+                    questions_list[linguagem][numeros] = codigo_unico
+
             pagina += 1
             sleep(1)
 
         except NoSuchElementException:
             if pagina + 1 > pagina_final:
                 break
+            print("pinto!")
             continue
 
     return questions_list
