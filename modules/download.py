@@ -1,7 +1,11 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.common.exceptions import (
+    NoSuchElementException,
+    TimeoutException,
+    UnexpectedAlertPresentException,
+)
 
 from time import sleep
 
@@ -14,7 +18,7 @@ def get_question_name(driver) -> str | None:
 
 def click_edit_button(driver) -> None:
     sleep(2)
-    driver.find_element(By.XPATH, "/html/body/div[7]/div/div[2]/div[1]/div/a").click()
+    driver.find_element(By.CLASS_NAME, "profile-buttons").click()
     sleep(2)
 
 
@@ -26,17 +30,22 @@ def get_question_diffculty(driver) -> str | None:
 
 def get_category_problem(driver) -> str | None:
     try:
-        click_edit_button(driver)
         return (
             WebDriverWait(driver, 30)
             .until(
                 EC.presence_of_element_located(
-                    (By.XPATH, "/html/body/div[8]/div/div[1]/div/ul/li[1]")
+                    (
+                        By.CSS_SELECTOR,
+                        "#page-name-c > ul:nth-child(2) > li:nth-child(1)",
+                    )
                 )
             )
             .text
         )
     except TimeoutException:
+        get_category_problem(driver)
+    except UnexpectedAlertPresentException:
+        driver.refresh()
         get_category_problem(driver)
 
 
@@ -60,13 +69,6 @@ def get_code(driver) -> str:
     return code
 
 
-def get_question_information(driver, question_id: int = -1):
-    code = get_code(driver)
-    category_type = get_category_problem(driver)
-    code_title = f"Questão {question_id} - {get_question_name(driver)} - {get_question_diffculty(driver)}"
-    return code, category_type, code_title
-
-
 def go_to_page_with_code(
     driver, question_id: int = -1, language: str = "x86_64"
 ) -> None:
@@ -80,3 +82,11 @@ def go_to_page_with_code(
             break
         except NoSuchElementException:
             continue
+
+
+def get_question_information(driver, question_id: int = -1):
+    code = get_code(driver)
+    click_edit_button(driver)
+    category_type = get_category_problem(driver)
+    code_title = f"Questão {question_id} - {get_question_name(driver)} - {get_question_diffculty(driver)}"
+    return code, category_type, code_title

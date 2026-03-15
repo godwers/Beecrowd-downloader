@@ -61,3 +61,14 @@ LANGUAGE_EXTENSION = {
     "PostgreSQL": ".sql",
     "C#": ".cs",
 }
+
+# this too bruhhhhhhhh 😴
+LANGUAGE_COMMENT = {
+    "Python 3.11": "#",
+    "Rust": "//",
+    "C99": "//",
+    "C++20": "//",
+    "C#": "//",
+    "PostgreSQL": "--",
+    "Lua": "--",
+}
