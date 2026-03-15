@@ -32,7 +32,6 @@ async def main(driver) -> None:
 
     for language in solved_list.keys():
         for question_number in solved_list[language].keys():
-            flag = 0
             unique_identifier = solved_list[language][question_number]
 
             if language in old_answers.keys():
@@ -43,7 +42,7 @@ async def main(driver) -> None:
                         os.path.exists("current_answers.json")
                     ):
                         continue
-                    flag = 1
+
                     del old_unique_identifier
 
             go_to_page_with_code(driver, unique_identifier)  # pyright: ignore[]
@@ -59,10 +58,8 @@ async def main(driver) -> None:
                 code,
                 code_title,
                 git_repository,
-                flag=flag,
             )
 
-            del flag
 
             print(code_title)
             print(category_type)

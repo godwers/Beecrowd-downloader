@@ -54,7 +54,6 @@ async def _write_file(
     question_title: str,
     question_number: str,
     git_repository: Repo,
-    flag: int = 0,
 ) -> None:
     task_update_git_repository = asyncio.create_task(
         _update_git_repository(
@@ -62,7 +61,7 @@ async def _write_file(
             question_number,
             language,
             os.getcwd().split(repository_name)[1][1:],
-            flag=flag,
+            f"resolucao{LANGUAGE_EXTENSION[language]}"
         )
     )
 
@@ -77,9 +76,9 @@ async def _update_git_repository(
     question_number: str,
     code_language: str,
     file_path: str,
-    flag: int = 0,
+    file_name: str,
 ) -> None:
-    if flag == 1:
+    if os.path.exists(file_name):
         commit_message = f"Edited {question_number} {code_language} version"
     else:
         commit_message = f"Added {question_number} {code_language} version"
@@ -118,13 +117,12 @@ async def add_question(
     code: str,
     question_title: str,
     git_repository: Repo,
-    flag: int = 0,
 ) -> None:
     question_title = _sanitize_question_title(question_title)
     _go_to_category_path(question_type)
     task_write_file = asyncio.create_task(
         _write_file(
-            language, code, question_title, question_number, git_repository, flag=flag
+            language, code, question_title, question_number, git_repository
         )
     )
     question_path = f"beecrowd_{question_number}"

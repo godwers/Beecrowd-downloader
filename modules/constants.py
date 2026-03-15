@@ -60,6 +60,7 @@ LANGUAGE_EXTENSION = {
     "Lua 5.4": ".lua",
     "JavaScript": ".js",
     "TypeScript 4.1": ".ts",
+    "TypeScript 5.1": ".ts",
     "C99": ".c",
     "C++20": ".cpp",
     "PostgreSQL": ".sql",
@@ -77,6 +78,7 @@ LANGUAGE_COMMENT = {
     "Go 1.15": "//",
     "Go 1.20": "//",
     "PostgreSQL": "--",
+    "TypeScript 5.1": "//",
     "Lua": "--",
     "Lua 5.4": "--",
 }
