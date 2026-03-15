@@ -12,23 +12,23 @@ from time import sleep
 from .constants import LANGUAGE_ID
 
 
-def get_question_name(driver) -> str | None:
+def _get_question_name(driver) -> str | None:
     return driver.title.split("-")[1]
 
 
-def click_edit_button(driver) -> None:
+def _click_edit_button(driver) -> None:
     sleep(2)
     driver.find_element(By.CLASS_NAME, "profile-buttons").click()
     sleep(2)
 
 
-def get_question_diffculty(driver) -> str | None:
+def _get_question_diffculty(driver) -> str | None:
     return driver.find_element(
         By.XPATH, "/html/body/div[8]/div[2]/div[1]/div/ul/li[3]/strong"
     ).text
 
 
-def get_category_problem(driver) -> str | None:
+def _get_category_problem(driver) -> str | None:
     try:
         return (
             WebDriverWait(driver, 30)
@@ -43,13 +43,13 @@ def get_category_problem(driver) -> str | None:
             .text
         )
     except TimeoutException:
-        get_category_problem(driver)
+        _get_category_problem(driver)
     except UnexpectedAlertPresentException:
         driver.refresh()
-        get_category_problem(driver)
+        _get_category_problem(driver)
 
 
-def get_code(driver) -> str:
+def _get_code(driver) -> str:
     code = ""
     code_range: range = range(
         len(
@@ -85,8 +85,8 @@ def go_to_page_with_code(
 
 
 def get_question_information(driver, question_id: int = -1):
-    code = get_code(driver)
-    click_edit_button(driver)
-    category_type = get_category_problem(driver)
-    code_title = f"Questão {question_id} - {get_question_name(driver)} - {get_question_diffculty(driver)}"
+    code = _get_code(driver)
+    _click_edit_button(driver)
+    category_type = _get_category_problem(driver)
+    code_title = f"Questão {question_id} - {_get_question_name(driver)} - {_get_question_diffculty(driver)}"
     return code, category_type, code_title

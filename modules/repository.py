@@ -22,11 +22,11 @@ folders = {
 }
 
 
-def go_to_parent_path() -> None:
+def _go_to_parent_path() -> None:
     os.chdir(path)
 
 
-def sanitize_question_title(question_title: str) -> str:
+def _sanitize_question_title(question_title: str) -> str:
     novo_texto = ""
 
     for index, char in enumerate(question_title):
@@ -40,11 +40,11 @@ def sanitize_question_title(question_title: str) -> str:
     return novo_texto
 
 
-def go_to_category_path(folder: str) -> None:
+def _go_to_category_path(folder: str) -> None:
     os.chdir(os.path.join(path, folders[folder]))
 
 
-def write_file(language: str, code: str, question_title) -> None:
+def _write_file(language: str, code: str, question_title) -> None:
     with open(f"resolucao{LANGUAGE_EXTENSION[language]}", "w", encoding="utf-8") as f:
         f.write(f"{LANGUAGE_COMMENT[language]} {question_title}\n")
         f.write(code)
@@ -69,8 +69,8 @@ def add_question(
     code: str,
     question_title: str,
 ) -> None:
-    question_title = sanitize_question_title(question_title)
-    go_to_category_path(question_type)
+    question_title = _sanitize_question_title(question_title)
+    _go_to_category_path(question_type)
     question_path = f"beecrowd_{question_number}"
     try:
         os.mkdir(question_path)
@@ -79,6 +79,6 @@ def add_question(
     finally:
         os.chdir(question_path)
 
-    write_file(language, code, question_title)
+    _write_file(language, code, question_title)
     print(os.getcwd())
-    go_to_parent_path()
+    _go_to_parent_path()
