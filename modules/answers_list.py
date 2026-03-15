@@ -30,7 +30,7 @@ def _get_page_number(driver) -> int | None:
         return int(last_page)
 
 
-def _list_loop(driver) -> dict[str,list[dict[int,str]]]:
+def _list_loop(driver) -> dict[str,list[dict[str,str]]]:
     questions_list = dict()
     pagina_final = _get_page_number(driver)
 
@@ -48,12 +48,11 @@ def _list_loop(driver) -> dict[str,list[dict[int,str]]]:
                         f"/html/body/div[7]/div[2]/div[2]/div[4]/div/div[2]/table/tbody/tr[{i}]/td[1]"
                 ).text
                 
-                numeros = int(
-                    driver.find_element(
-                        By.XPATH,
-                        f"/html/body/div/div/div[2]/div[4]/div/div[2]/table/tbody/tr[{i}]/td[3]/a",
-                    ).text
-                )
+                numeros = driver.find_element(
+                        By.XPATH, 
+                        f"/html/body/div/div/div[2]/div[4]/div/div[2]/table/tbody/tr[{i}]/td[3]/a"
+                ).text
+                
                 linguagem = driver.find_element(
                     By.XPATH,
                     f"/html/body/div[7]/div/div[2]/div[4]/div/div[2]/table/tbody/tr[{i}]/td[6]",
@@ -76,7 +75,7 @@ def _list_loop(driver) -> dict[str,list[dict[int,str]]]:
     return questions_list
 
 
-def get_solved_list(driver) -> dict[str,list[dict[int,str]]]:
+def get_solved_list(driver) -> dict[str,list[dict[str,str]]]:
     driver.get(ACCEPTED_LIST_URL)
     question_list = _list_loop(driver)
 

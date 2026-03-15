@@ -1,4 +1,4 @@
-import json
+from json import dump,load
 import os
 from time import sleep
 from sys import argv
@@ -19,7 +19,7 @@ async def main(driver) -> None:
 
     print("Login Successfully")
 
-    solved_list: dict[str,list[dict[int,str]]] = get_solved_list(driver)
+    solved_list: dict[str,list[dict[str,str]]] = get_solved_list(driver)
     print("Accepted answers was retrived")
 
     await task_create_repository
@@ -29,11 +29,11 @@ async def main(driver) -> None:
         old_answers = solved_list 
     else:
         with open("current_answers.json","r",encoding="utf-8") as file:
-            old_answers = json.load(file)
+            old_answers = load(file)
 
     for language in solved_list:
         pointer = 0
-        questions_list : list[dict[int,str]] = solved_list[language]
+        questions_list : list[dict[str,str]] = solved_list[language]
         while pointer < len(questions_list):
             _ = questions_list[pointer]
             question_id = list(_.keys())[0]
@@ -65,7 +65,7 @@ async def main(driver) -> None:
             pointer += 1
             sleep(1)
     with open("current_answers.json","w",encoding="utf-8") as f:
-        json.dump(solved_list,f,indent=4)
+        dump(solved_list,f,indent=4)
 
 if __name__ == "__main__":
     options = webdriver.FirefoxOptions()
@@ -77,7 +77,7 @@ if __name__ == "__main__":
 
     with webdriver.Firefox(options=options) as driver:
         addon_file_path = add_ublock(driver)
-        driver.implicitly_wait(5)
+        driver.implicitly_wait(2)
         run(main(driver))
         remove_ublock(addon_file_path)
 
