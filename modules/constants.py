@@ -48,3 +48,16 @@ LANGUAGE_ID = {
     "TypeScript 4.1": 32,
     "TypeScript 5.1": 41,
 }
+
+# im too lazy to add all of them please send a pull request if you are reading this
+LANGUAGE_EXTENSION = {
+    "Python 3.11": ".py",
+    "Rust": ".rs",
+    "Lua": ".lua",
+    "JavaScript": ".js",
+    "TypeScript 4.1": ".ts",
+    "C99": ".c",
+    "C++20": ".cpp",
+    "PostgreSQL": ".sql",
+    "C#": ".cs",
+}

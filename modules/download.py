@@ -8,7 +8,7 @@ from time import sleep
 from .constants import LANGUAGE_ID
 
 
-def get_question_name(driver):
+def get_question_name(driver) -> str | None:
     return driver.title.split("-")[1]
 
 
@@ -18,13 +18,13 @@ def click_edit_button(driver) -> None:
     sleep(2)
 
 
-def get_question_diffculty(driver):
+def get_question_diffculty(driver) -> str | None:
     return driver.find_element(
         By.XPATH, "/html/body/div[8]/div[2]/div[1]/div/ul/li[3]/strong"
     ).text
 
 
-def get_category_problem(driver):
+def get_category_problem(driver) -> str | None:
     try:
         click_edit_button(driver)
         return (

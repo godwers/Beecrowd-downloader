@@ -1,5 +1,5 @@
 import os
-
+from .constants import LANGUAGE_EXTENSION
 
 current_directory = os.getcwd()
 path = os.path.join(current_directory, "beecrowd_repository")
@@ -16,6 +16,19 @@ folders = {
 }
 
 
+def go_to_parent_path() -> None:
+    os.chdir(path)
+
+
+def go_to_category_path(folder: str) -> None:
+    os.chdir(os.path.join(path, folders[folder]))
+
+
+def write_file(language: str, code: str) -> None:
+    with open(f"resolucao{LANGUAGE_EXTENSION[language]}", "w", encoding="utf-8") as f:
+        f.write(code)
+
+
 def create_repository() -> None:
     try:
         os.mkdir(path)
@@ -26,3 +39,19 @@ def create_repository() -> None:
     except FileExistsError:
         print("Folder already exist!")
         os.chdir(path)
+
+
+def add_question(
+    question_type: str, question_number: str, language: str, code: str
+) -> None:
+    go_to_category_path(question_type)
+    question_path = f"beecrowd_{question_number}"
+    try:
+        os.mkdir(question_path)
+    except FileExistsError:
+        pass
+    finally:
+        os.chdir(question_path)
+
+    write_file(language, code)
+    go_to_parent_path()
