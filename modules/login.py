@@ -21,7 +21,7 @@ def login(driver) -> None:
 
     username = input("Digite seu email: ")
     driver.find_element(By.NAME, "email").send_keys(username)
-    password = getpass(prompt="Digite a senha da conta: ")
+    password = getpass(prompt="Digite a senha da conta: ",echo_char="*")
     driver.find_element(By.NAME, "password").send_keys(password + Keys.ENTER)
 
     if not _check_login(driver, HOME_URL):
