@@ -6,12 +6,13 @@ from git import Repo
 
 from .constants import LANGUAGE_EXTENSION, LANGUAGE_COMMENT
 
+repository_name = "beecrowd_repository"
 if sys.platform == "win32":
     home_path = os.environ["%USERPROFILE%"]
 else:  # assuming if you use linux/macos because they are based on unix
     home_path = os.environ["HOME"]
 
-path = os.path.join(home_path, "beecrowd_repository")
+path = os.path.join(home_path, repository_name)
 folders = {
     "INICIANTE": "1. Iniciante",
     "AD-HOC": "2. AD-HOC",
@@ -54,7 +55,8 @@ async def _write_file(language: str,
                       git_repository : Repo) -> None:
     task_update_git_repository = asyncio.create_task(_update_git_repository(git_repository,
                                                                             question_number,
-                                                                            language))
+                                                                            language,
+                                                                            os.getcwd().split(repository_name)[1][1:]))
     with open(f"resolucao{LANGUAGE_EXTENSION[language]}", "w", encoding="utf-8") as f:
         f.write(f"{LANGUAGE_COMMENT[language]} {question_title}\n")
         f.write(code)
@@ -62,8 +64,9 @@ async def _write_file(language: str,
 
 async def _update_git_repository(git_repository : Repo,
                                  question_number : str,
-                                 code_language: str) -> None:
-    git_repository.index.add(path)
+                                 code_language: str,
+                                 file_path: str) -> None:
+    git_repository.index.add(file_path)
     git_repository.index.commit(f"Added {question_number} {code_language} version")
     
 
