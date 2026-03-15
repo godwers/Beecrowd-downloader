@@ -1,0 +1,11 @@
+[project]
+name = "beecrowd-downloader"
+version = "0.1.0"
+description = "Get all the code you answered and make it a repository,share your knowledge!"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "gitpython>=3.1.46",
+    "selenium>=4.38.0",
+    "wget>=3.2",
+]
